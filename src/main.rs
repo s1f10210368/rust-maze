@@ -1,4 +1,3 @@
-use std::collections::VecDeque;
 use std::io::{self, Write};
 use rand::seq::SliceRandom;
 
@@ -28,9 +27,6 @@ fn main() {
 
     // 迷路を表示
     print_maze(&maze);
-
-    // 解を見つけて表示
-    find_and_print_solution(&mut maze);
 }
 
 // 迷路の初期化
@@ -71,38 +67,6 @@ fn generate_walls(maze: &mut Vec<Vec<char>>) {
             }
         }
     }
-}
-
-// 解を見つけて表示
-fn find_and_print_solution(maze: &mut Vec<Vec<char>>) {
-    // スタート地点
-    let start = (0, 0);
-    // ゴール地点
-    let goal = (HEIGHT - 1, WIDTH - 1);
-
-    // スタート地点から開始
-    let mut current_position = start;
-
-    // スタートからゴールまでの最終経路を表示
-    print_maze(maze);
-    if current_position == goal {
-        println!("Solution found!");
-    }
-}
-
-// 次の座標を取得するヘルパー関数
-fn get_next_position((i, j): (usize, usize), direction: Direction) -> (usize, usize) {
-    match direction {
-        Direction::Up => if i > 0 { (i - 1, j) } else { (i, j) },
-        Direction::Down => (i + 1, j),
-        Direction::Left => if j > 0 { (i, j - 1) } else { (i, j) },
-        Direction::Right => (i, j + 1),
-    }
-}
-
-// 移動が有効かどうかを判定するヘルパー関数
-fn is_valid_move((i, j): (usize, usize), maze: &Vec<Vec<char>>) -> bool {
-    i < HEIGHT && j < WIDTH && maze[i][j] != '■' && maze[i][j] != 'o'
 }
 
 // 迷路を表示
