@@ -37,7 +37,7 @@ fn initialize_maze() -> Vec<Vec<char>> {
     // 奇数の座標に柱を配置
     for i in (1..HEIGHT).step_by(2) {
         for j in (1..WIDTH).step_by(2) {
-            maze[i][j] = '■'; // '■' は柱を表す
+            maze[i][j] = '◆'; // '■' は柱を表す
         }
     }
 
@@ -90,3 +90,5 @@ fn print_maze(maze: &Vec<Vec<char>>) {
     // コンソールのバッファをフラッシュして即座に表示
     io::stdout().flush().unwrap();
 }
+
+
