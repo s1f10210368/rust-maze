@@ -1,5 +1,7 @@
-use std::io::{self, Write};
-use rand::seq::SliceRandom;
+use std::{thread, time};
+use std::io;
+use std::io::Write;
+use rand::prelude::SliceRandom;
 
 const WIDTH: usize = 11;
 const HEIGHT: usize = 11;
@@ -18,15 +20,24 @@ enum Direction {
     Right,
 }
 
+
 fn main() {
-    // 迷路を柱と壁で初期化
+
     let mut maze = initialize_maze();
 
-    // 柱から壁を生成
     generate_walls(&mut maze);
-
-    // 迷路を表示
+    
     print_maze(&maze);
+    
+    let start_i = 0;
+    let start_j = 0;
+    
+    if search_maze(&mut maze, start_i, start_j) {
+        println!("ゴールに到達!");
+    } else {
+        println!("ゴールに到達できず..."); 
+    }
+
 }
 
 // 迷路の初期化
@@ -92,3 +103,33 @@ fn print_maze(maze: &Vec<Vec<char>>) {
 }
 
 
+fn search_maze(maze: &mut Vec<Vec<char>>, i: usize, j: usize) -> bool {
+    if i < 0 || i >= maze.len() || j < 0 || j >= maze[0].len() {
+        return false; 
+    }
+
+    if maze[i][j] == GOAL {
+        maze[i][j] = PATH;
+        return true; 
+    }
+
+    if maze[i][j] != EMPTY {
+        return false;
+    }
+
+    maze[i][j] = PATH;
+
+    print_maze(maze);
+    thread::sleep(time::Duration::from_millis(100));
+
+    if search_maze(maze, i - 1, j) 
+        || search_maze(maze, i + 1, j)
+        || search_maze(maze, i, j - 1) 
+        || search_maze(maze, i , j + 1) {
+        
+        return true;
+    }
+
+    maze[i][j] = EMPTY;
+    return false;
+}
